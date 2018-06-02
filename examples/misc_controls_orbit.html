@@ -36,11 +36,14 @@
 			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - orbit controls example
 		</div>
 
-		<script src="../build/three.js"></script>
-		<script src="js/controls/OrbitControls.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+		<script src="https://unpkg.com/browser-es-module-loader/dist/babel-browser-build.js"></script>
+		<script src="https://unpkg.com/browser-es-module-loader/dist/browser-es-module-loader.js"></script>
 		<script src="js/Detector.js"></script>
 
-		<script>
+		<script type="module" >
+            import { Scene, Color, FogExp2, WebGLRenderer, PerspectiveCamera, CylinderBufferGeometry, Mesh, MeshPhongMaterial, AmbientLight, DirectionalLight } from '../build/three.module.js';
+            import { OrbitControls } from './js/controls/OrbitControls.js';
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
@@ -52,21 +55,21 @@
 
 			function init() {
 
-				scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0xcccccc );
-				scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
+				scene = new Scene();
+				scene.background = new Color( 0xcccccc );
+				scene.fog = new FogExp2( 0xcccccc, 0.002 );
 
-				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer = new WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 
-				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera = new PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
 				camera.position.set( 400, 200, 0 );
 
 				// controls
 
-				controls = new THREE.OrbitControls( camera, renderer.domElement );
+				controls = new OrbitControls( camera, renderer.domElement );
 
 				//controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
 
@@ -82,12 +85,12 @@
 
 				// world
 
-				var geometry = new THREE.CylinderBufferGeometry( 0, 10, 30, 4, 1 );
-				var material = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+				var geometry = new CylinderBufferGeometry( 0, 10, 30, 4, 1 );
+				var material = new MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
 
 				for ( var i = 0; i < 500; i ++ ) {
 
-					var mesh = new THREE.Mesh( geometry, material );
+					var mesh = new Mesh( geometry, material );
 					mesh.position.x = Math.random() * 1600 - 800;
 					mesh.position.y = 0;
 					mesh.position.z = Math.random() * 1600 - 800;
@@ -99,15 +102,15 @@
 
 				// lights
 
-				var light = new THREE.DirectionalLight( 0xffffff );
+				var light = new DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
 				scene.add( light );
 
-				var light = new THREE.DirectionalLight( 0x002288 );
+				var light = new DirectionalLight( 0x002288 );
 				light.position.set( - 1, - 1, - 1 );
 				scene.add( light );
 
-				var light = new THREE.AmbientLight( 0x222222 );
+				var light = new AmbientLight( 0x222222 );
 				scene.add( light );
 
 				//
